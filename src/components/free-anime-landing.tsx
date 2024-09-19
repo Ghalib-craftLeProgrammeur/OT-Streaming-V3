@@ -1,16 +1,15 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 
-export function FreeAnimeLanding() {
+export function OTStreamingLanding() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Hero Section */}
       <header className="bg-gradient-to-r from-green-600 to-blue-600 py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-center">
-            FreeAnimeStream
+            OT-Streaming
           </h1>
           <p className="mt-3 max-w-md mx-auto text-xl text-center sm:text-2xl md:mt-5 md:max-w-3xl">
             Watch unlimited anime, completely free!
@@ -26,7 +25,7 @@ export function FreeAnimeLanding() {
       {/* Features Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-extrabold text-center mb-12">Why Choose FreeAnimeStream?</h2>
+          <h2 className="text-3xl font-extrabold text-center mb-12">Why Choose OT-Streaming?</h2>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <FeatureCard
               icon="🆓"
@@ -50,7 +49,7 @@ export function FreeAnimeLanding() {
       {/* Popular Anime Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-800">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-extrabold text-center mb-12">Popular on FreeAnimeStream</h2>
+          <h2 className="text-3xl font-extrabold text-center mb-12">Popular on OT-Streaming</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {[...Array(10)].map((_, i) => (
               <div key={i} className="aspect-w-2 aspect-h-3 bg-gray-700 rounded-lg overflow-hidden">
@@ -89,28 +88,10 @@ export function FreeAnimeLanding() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-green-600">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-extrabold mb-8">Ready to start watching for free?</h2>
-          <p className="text-xl mb-8">Enter your email to create your free account.</p>
-          <form className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Input
-              type="email"
-              placeholder="Email address"
-              className="max-w-sm"
-            />
-            <Button size="lg" className="bg-gray-900 hover:bg-gray-800">
-              Get Started
-            </Button>
-          </form>
-        </div>
-      </section>
-
       {/* Footer */}
       <footer className="bg-gray-800 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
-          <p>&copy; 2023 FreeAnimeStream. All rights reserved.</p>
+          <p>&copy; 2023 OT-Streaming. All rights reserved.</p>
           <p className="mt-2 text-sm text-gray-400">Supported by ads and community contributions.</p>
         </div>
       </footer>
@@ -138,5 +119,4 @@ function StepCard({ number, title, description }) {
   )
 }
 
-
-export default FreeAnimeLanding;
+export default OTStreamingLanding;

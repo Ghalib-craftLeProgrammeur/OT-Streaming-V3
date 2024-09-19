@@ -1,7 +1,7 @@
-import FreeAnimeLanding from '../components/free-anime-landing'
+import OTStreamingLanding from '../components/free-anime-landing'
 
 export default function Home() {
   return (
-    <FreeAnimeLanding />
+    <OTStreamingLanding />
    );
 }
