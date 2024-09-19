@@ -1,8 +1,33 @@
-'use client'
+'use client';
 
-import { Button } from "@/components/ui/button"
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+
+interface Anime {
+  thumbnail: string;
+  name: string;
+}
 
 export function OTStreamingLanding() {
+  const [animeList, setAnimeList] = useState<Anime[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchAnime() {
+      try {
+        const response = await fetch('/api/popularanime');
+        const data = await response.json();
+        setAnimeList(data);
+      } catch (error) {
+        console.error('Failed to fetch popular anime:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchAnime();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Hero Section */}
@@ -51,15 +76,25 @@ export function OTStreamingLanding() {
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-extrabold text-center mb-12">Popular on OT-Streaming</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {[...Array(10)].map((_, i) => (
-              <div key={i} className="aspect-w-2 aspect-h-3 bg-gray-700 rounded-lg overflow-hidden">
-                <img
-                  src={`/placeholder.svg?height=450&width=300`}
-                  alt={`Anime cover ${i + 1}`}
-                  className="object-cover w-full h-full"
-                />
-              </div>
-            ))}
+            {loading ? (
+              <p className="text-center col-span-full">Loading...</p>
+            ) : (
+              animeList.map((anime, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-700 rounded-lg overflow-hidden text-center"
+                >
+                  <img
+                    src={anime.thumbnail || '/placeholder.svg?height=450&width=300'}
+                    alt={`Anime cover ${index + 1}`}
+                    className="object-cover w-full h-40"
+                  />
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold">{anime.name}</h3>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </section>
@@ -96,7 +131,7 @@ export function OTStreamingLanding() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
 
 function FeatureCard({ icon, title, description }) {
@@ -106,7 +141,7 @@ function FeatureCard({ icon, title, description }) {
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
       <p className="text-gray-400">{description}</p>
     </div>
-  )
+  );
 }
 
 function StepCard({ number, title, description }) {
@@ -116,7 +151,7 @@ function StepCard({ number, title, description }) {
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
       <p className="text-gray-400">{description}</p>
     </div>
-  )
+  );
 }
 
 export default OTStreamingLanding;
