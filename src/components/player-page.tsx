@@ -1,21 +1,50 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Maximize } from "lucide-react"
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { Button } from "@/components/ui/button";
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Maximize } from "lucide-react";
+import { getEpisodeDetails } from '@/lib/episode'; // Adjust the import based on your structure
+
+interface EpisodeDetails {
+  anime: string;
+  episodeNumber: number;
+  name: string;
+  description: string;
+  season: number; // Add season if available
+}
 
 export function PlayerPageComponent() {
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [isMuted, setIsMuted] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [episodeDetails, setEpisodeDetails] = useState<EpisodeDetails | null>(null);
 
-  const togglePlay = () => setIsPlaying(!isPlaying)
-  const toggleMute = () => setIsMuted(!isMuted)
+  const router = useRouter();
+  const { name, episode } = router.query; // Get the anime name and episode from the URL
+
+  const togglePlay = () => setIsPlaying(!isPlaying);
+  const toggleMute = () => setIsMuted(!isMuted);
+
+  useEffect(() => {
+    const fetchEpisodeDetails = async () => {
+      if (name && episode) {
+        const details = await getEpisodeDetails({ episode: Number(episode), animeName: name as string });
+        setEpisodeDetails(details as EpisodeDetails);
+      }
+    };
+
+    fetchEpisodeDetails();
+  }, [name, episode]);
+
+  if (!episodeDetails) {
+    return <div>Loading...</div>; // Or your loading state
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <header className="bg-gray-800 py-4 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl font-bold">FreeAnimeStream</h1>
+          <h1 className="text-2xl font-bold">OT-Streaming</h1>
         </div>
       </header>
 
@@ -62,26 +91,27 @@ export function PlayerPageComponent() {
                 </div>
               </div>
               <div className="p-4">
-                <h2 className="text-2xl font-bold">Attack on Titan</h2>
-                <p className="text-gray-400">Season 1, Episode 1: To You, 2,000 Years in the Future</p>
-                <p className="mt-2">Humanity lives inside cities surrounded by enormous walls due to the Titans, gigantic humanoid creatures who devour humans seemingly without reason.</p>
+                <h2 className="text-2xl font-bold">{episodeDetails.anime}</h2>
+                <p className="text-gray-400">Season {episodeDetails.season}, Episode {episodeDetails.episodeNumber}: {episodeDetails.name}</p>
+                <p className="mt-2">{episodeDetails.description}</p>
               </div>
             </div>
           </div>
           <div>
             <h3 className="text-xl font-bold mb-4">Up Next</h3>
             <div className="space-y-4">
+              {/* You may want to map over the upcoming episodes */}
               {[...Array(5)].map((_, index) => (
                 <div key={index} className="flex space-x-4 bg-gray-800 rounded-lg p-2">
                   <div className="flex-shrink-0 w-24 h-16 bg-gray-700 rounded-lg overflow-hidden">
                     <img 
-                      src={`/placeholder.svg?height=90&width=160&text=Episode+${index + 2}`}
-                      alt={`Episode ${index + 2} Thumbnail`}
+                      src={`/placeholder.svg?height=90&width=160&text=Episode+${episodeDetails.episodeNumber + index + 1}`}
+                      alt={`Episode ${episodeDetails.episodeNumber + index + 1} Thumbnail`}
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div>
-                    <h4 className="font-semibold">Episode {index + 2}</h4>
+                    <h4 className="font-semibold">Episode {episodeDetails.episodeNumber + index + 1}</h4>
                     <p className="text-sm text-gray-400">24 min</p>
                   </div>
                 </div>
@@ -93,10 +123,11 @@ export function PlayerPageComponent() {
 
       <footer className="bg-gray-800 py-6 px-4 sm:px-6 lg:px-8 mt-12">
         <div className="max-w-7xl mx-auto text-center">
-          <p>&copy; 2023 FreeAnimeStream. All rights reserved.</p>
+          <p>&copy; 2023 OT-Streaming. All rights reserved.</p>
           <p className="mt-2 text-sm text-gray-400">Supported by ads and community contributions.</p>
         </div>
       </footer>
     </div>
-  )
+  );
 }
+export default PlayerPageComponent

@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -9,6 +8,7 @@ interface Anime {
 }
 
 export function OTStreamingLanding() {
+  
   const [animeList, setAnimeList] = useState<Anime[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -40,7 +40,7 @@ export function OTStreamingLanding() {
             Watch unlimited anime, completely free!
           </p>
           <div className="mt-10 flex justify-center">
-            <Button size="lg" className="bg-green-500 hover:bg-green-600">
+            <Button onClick={() => window.location.href = '/start-watching'} size="lg" className="bg-green-500 hover:bg-green-600">
               Start Watching Now
             </Button>
           </div>
@@ -52,21 +52,9 @@ export function OTStreamingLanding() {
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-extrabold text-center mb-12">Why Choose OT-Streaming?</h2>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            <FeatureCard
-              icon="🆓"
-              title="100% Free"
-              description="No hidden fees, no credit card required. Ever."
-            />
-            <FeatureCard
-              icon="🌟"
-              title="High-Quality Anime"
-              description="Stream a vast library of anime series and movies."
-            />
-            <FeatureCard
-              icon="📱"
-              title="Watch Anywhere"
-              description="Enjoy on your TV, phone, tablet, or computer."
-            />
+            <FeatureCard icon="🆓" title="100% Free" description="No hidden fees, no credit card required. Ever." />
+            <FeatureCard icon="🌟" title="High-Quality Anime" description="Stream a vast library of anime series and movies." />
+            <FeatureCard icon="📱" title="Watch Anywhere" description="Enjoy on your TV, phone, tablet, or computer." />
           </div>
         </div>
       </section>
@@ -80,10 +68,7 @@ export function OTStreamingLanding() {
               <p className="text-center col-span-full">Loading...</p>
             ) : (
               animeList.map((anime, index) => (
-                <div
-                  key={index}
-                  className="bg-gray-700 rounded-lg overflow-hidden text-center"
-                >
+                <div key={index} className="bg-gray-700 rounded-lg overflow-hidden text-center">
                   <img
                     src={anime.thumbnail || '/placeholder.svg?height=450&width=300'}
                     alt={`Anime cover ${index + 1}`}
@@ -104,21 +89,9 @@ export function OTStreamingLanding() {
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-extrabold text-center mb-12">How It Works</h2>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
-            <StepCard
-              number="1"
-              title="Sign Up"
-              description="Create a free account in seconds."
-            />
-            <StepCard
-              number="2"
-              title="Browse"
-              description="Explore our vast library of anime."
-            />
-            <StepCard
-              number="3"
-              title="Watch"
-              description="Stream your favorite anime anytime, anywhere."
-            />
+            <StepCard number="1" title="Sign Up" description="Create a free account in seconds." />
+            <StepCard number="2" title="Browse" description="Explore our vast library of anime." />
+            <StepCard number="3" title="Watch" description="Stream your favorite anime anytime, anywhere." />
           </div>
         </div>
       </section>
