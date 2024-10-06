@@ -1,4 +1,4 @@
-import { db } from './firebase'; // Ensure this path points to your Firebase Admin setup
+import { db } from '../pages/api/firebase'; // Ensure this path points to your Firebase Admin setup
 
 interface AnimeList {
     name: string;      // Document name
