@@ -1,4 +1,4 @@
-import PlayerPageComponent from '../../../../components/player-page';
+import { PlayerPageComponent } from '../../../../components/player-page'
 
 
 

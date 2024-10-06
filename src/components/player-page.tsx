@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'; // Update this
 import { Button } from "@/components/ui/button";
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Maximize } from "lucide-react";
 import { getEpisodeDetails } from '@/lib/episode'; // Adjust the import based on your structure

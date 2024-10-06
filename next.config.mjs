@@ -1,31 +1,33 @@
-// @ts-check
+import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
 
-/**
- * @type {import('next').NextConfig}
- */
 const nextConfig = {
   webpack: (config, { isServer }) => {
-    // Prevent Webpack from bundling Node.js core modules for client-side code
+    // Add node polyfills for client-side builds
     if (!isServer) {
-      config.resolve.fallback = {
-        fs: false,
-        net: false,
-        tls: false,
-        child_process: false, // Prevent bundling child_process if used in Firebase Admin SDK
-      };
+      config.plugins.push(new NodePolyfillPlugin());
     }
 
-    // Exclude WebAssembly (.wasm) files
+    // Enable async WebAssembly and layers support
+    config.experiments = {
+      asyncWebAssembly: true, // Enable async WebAssembly support
+      layers: true, // Enable layers support
+    };
+
     config.module.rules.push({
       test: /\.wasm$/,
-      type: 'javascript/auto', // Avoids WebAssembly handling in Webpack
-      use: 'ignore-loader', // Ignores .wasm files
+      type: 'webassembly/async' // Specify the type for WebAssembly modules
     });
 
-    return config;
-  },
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false, // Prevent bundling server-side modules on the client
+      net: false,
+      tls: false,
+      events: 'events' // Use direct string reference for events module
+    };
 
-  // Add any other config options here
+    return config;
+  }
 };
 
 export default nextConfig;

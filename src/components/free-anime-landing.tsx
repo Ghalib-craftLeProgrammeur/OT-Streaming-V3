@@ -106,8 +106,12 @@ export function OTStreamingLanding() {
     </div>
   );
 }
-
-function FeatureCard({ icon, title, description }) {
+interface FeatureCardProps {
+  icon: string;
+  title: string;
+  description: string;
+}
+function FeatureCard({ icon, title, description }: FeatureCardProps) {
   return (
     <div className="bg-gray-800 rounded-lg p-6 text-center">
       <div className="text-4xl mb-4">{icon}</div>
@@ -117,7 +121,13 @@ function FeatureCard({ icon, title, description }) {
   );
 }
 
-function StepCard({ number, title, description }) {
+interface StepCardProps {
+  number: string;
+  title: string;
+  description: string;
+}
+
+function StepCard({ number, title, description }: StepCardProps) {
   return (
     <div className="bg-gray-800 rounded-lg p-6 text-center">
       <div className="text-3xl font-bold text-green-500 mb-4">{number}</div>
