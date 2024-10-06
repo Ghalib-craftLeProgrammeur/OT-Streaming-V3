@@ -4,7 +4,17 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
+    // Prevent Webpack from bundling Node.js core modules for client-side code
+    if (!isServer) {
+      config.resolve.fallback = {
+        fs: false,
+        net: false,
+        tls: false,
+        child_process: false, // Prevent bundling child_process if used in Firebase Admin SDK
+      };
+    }
+
     // Exclude WebAssembly (.wasm) files
     config.module.rules.push({
       test: /\.wasm$/,
