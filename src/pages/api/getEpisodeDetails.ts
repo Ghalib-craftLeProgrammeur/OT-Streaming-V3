@@ -1,42 +1,38 @@
+// src/pages/api/getEpisodeDetails.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { db } from './firebase'; // Ensure this points to your Firebase Admin setup
+import { db } from '@/pages/api/firebase'; // Import the Firestore instance
 
 interface EpisodeInfo {
-    episode: number;
-    animeName: string;
+  episode: number;
+  animeName: string;
 }
 
 interface Episode {
-    episodeNumber: number;
-    embedCode: string;
-    anime: string;
-    nextEpisodeNumber: number;
-    lastModified: Date;
-    name: string; // Include necessary fields
-    description: string; // Include necessary fields
-    season: number; // Include necessary fields
+  episodeNumber: number;
+  embedCode: string;
+  anime: string;
+  nextEpisodeNumber: number;
+  lastModified: Date;
+  name: string;
+  description: string;
+  season: number;
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'POST') {
-        const { episode, animeName }: EpisodeInfo = req.body;
+  const { episode, animeName }: EpisodeInfo = req.body; // Expecting the episode info in the request body
 
-        try {
-            const docRef = db.collection("anime").doc(animeName).collection("episodes").doc(episode.toString());
-            const doc = await docRef.get();
-
-            if (doc.exists) {
-                const episodeData = doc.data() as Episode; // Type assertion
-                res.status(200).json(episodeData);
-            } else {
-                res.status(404).json({ message: 'Episode not found' });
-            }
-        } catch (error) {
-            console.error("Error fetching episode details:", error);
-            res.status(500).json({ message: 'Error fetching episode details' });
-        }
+  try {
+    const docRef = db.collection("anime").doc(animeName).collection("episodes").doc(episode.toString());
+    const doc = await docRef.get();
+    
+    if (doc.exists) {
+      const episodeData = doc.data() as Episode;
+      return res.status(200).json(episodeData); // Return the episode data as JSON
     } else {
-        res.setHeader('Allow', ['POST']);
-        res.status(405).end(`Method ${req.method} Not Allowed`);
+      return res.status(404).json({ error: "Episode not found" });
     }
+  } catch (error) {
+    console.error("Error fetching episode details:", error);
+    return res.status(500).json({ error: "Failed to fetch episode details" });
+  }
 }

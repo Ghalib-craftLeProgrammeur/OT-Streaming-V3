@@ -1,28 +1,43 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { Button } from "@/components/ui/button"
-import { Play, Star } from "lucide-react"
+import Link from 'next/link';
+import { Button } from "@/components/ui/button";
+import { Play, Star } from "lucide-react";
+import { useParams } from 'next/navigation'; // Correct hook for dynamic params
+import { useEffect, useState } from 'react';
 
 export function AnimeDetails() {
+  const params = useParams(); // Use useParams to access dynamic route params
+  let animename = "name"; // Access the dynamic route parameter (e.g., [name])
+  
+  if(params != null) {
+    animename = params.name as string;
+  } 
+
+  const [animeTitle, setAnimeTitle] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (animename) {
+      setAnimeTitle(animename as string); // Set the anime title from the dynamic route
+    }
+  }, [animename]);
+
+  // Placeholder data for anime details
   const animeDetails = {
-    title: "Attack on Titan",
+    title: animeTitle || "Loading...", // Fallback while loading
     thumbnail: "/placeholder.svg?height=400&width=600&text=Attack+on+Titan",
     rating: 4.8,
-    description: "Centuries ago, mankind was slaughtered to near extinction by monstrous humanoid creatures called Titans, forcing humans to hide in fear behind enormous concentric walls. What makes these giants truly terrifying is that their taste for human flesh is not born out of hunger but what appears to be out of pleasure.",
+    description: "Centuries ago, mankind was slaughtered to near extinction by monstrous humanoid creatures called Titans...",
     genres: ["Action", "Dark Fantasy", "Post-apocalyptic"],
     episodes: [
       { number: 1, title: "To You, 2,000 Years in the Future", duration: "24:12" },
-      { number: 2, title: "That Day: The Fall of Shiganshina, Part 1", duration: "24:12" },
-      { number: 3, title: "A Dim Light Amid Despair: Humanity's Comeback, Part 1", duration: "24:12" },
-      { number: 4, title: "The Night of the Closing Ceremony: Humanity's Comeback, Part 2", duration: "24:12" },
-      { number: 5, title: "First Battle: The Struggle for Trost, Part 1", duration: "24:12" },
-      { number: 6, title: "The World the Girl Saw: The Struggle for Trost, Part 2", duration: "24:12" },
-      { number: 7, title: "Small Blade: The Struggle for Trost, Part 3", duration: "24:12" },
-      { number: 8, title: "I Can Hear His Heartbeat: The Struggle for Trost, Part 4", duration: "24:12" },
-      { number: 9, title: "Whereabouts of His Left Arm: The Struggle for Trost, Part 5", duration: "24:12" },
-      { number: 10, title: "Response: The Struggle for Trost, Part 6", duration: "24:12" },
+      // ... more episodes
     ]
+  };
+
+  // Loading state
+  if (!animeTitle) {
+    return <div className="min-h-screen bg-gray-900 text-white">Loading...</div>;
   }
 
   return (
@@ -93,7 +108,7 @@ export function AnimeDetails() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
 
 export default AnimeDetails;

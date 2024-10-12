@@ -36,36 +36,37 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var firebase_1 = require("@/pages/api/firebase"); // Import the Firestore instance
-function handler(req, res) {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, episode, animeName, docRef, doc, episodeData, error_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+exports.getEpisodeDetails = void 0;
+function getEpisodeDetails(episodeInfo) {
+    return __awaiter(this, void 0, Promise, function () {
+        var response, episodeData, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _a = req.body, episode = _a.episode, animeName = _a.animeName;
-                    _b.label = 1;
+                    _a.trys.push([0, 3, , 4]);
+                    return [4 /*yield*/, fetch('/api/getEpisodeDetails', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(episodeInfo)
+                        })];
                 case 1:
-                    _b.trys.push([1, 3, , 4]);
-                    docRef = firebase_1.db.collection("anime").doc(animeName).collection("episodes").doc(episode.toString());
-                    return [4 /*yield*/, docRef.get()];
+                    response = _a.sent();
+                    if (!response.ok) {
+                        throw new Error("Error: " + response.statusText);
+                    }
+                    return [4 /*yield*/, response.json()];
                 case 2:
-                    doc = _b.sent();
-                    if (doc.exists) {
-                        episodeData = doc.data();
-                        return [2 /*return*/, res.status(200).json(episodeData)]; // Return the episode data as JSON
-                    }
-                    else {
-                        return [2 /*return*/, res.status(404).json({ error: "Episode not found" })];
-                    }
-                    return [3 /*break*/, 4];
+                    episodeData = _a.sent();
+                    return [2 /*return*/, episodeData]; // Return the fetched episode data
                 case 3:
-                    error_1 = _b.sent();
+                    error_1 = _a.sent();
                     console.error("Error fetching episode details:", error_1);
-                    return [2 /*return*/, res.status(500).json({ error: "Failed to fetch episode details" })];
+                    return [2 /*return*/, null]; // Return null on error
                 case 4: return [2 /*return*/];
             }
         });
     });
 }
-exports["default"] = handler;
+exports.getEpisodeDetails = getEpisodeDetails;

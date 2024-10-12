@@ -25,7 +25,6 @@ const nextConfig = {
       fs: false, // Prevent bundling server-side modules on the client
       net: false,
       tls: false,
-      events: require.resolve('events'), // Ensure 'events' module is resolved properly
       child_process: false, // Prevent bundling child_process module
     };
 
@@ -35,7 +34,9 @@ const nextConfig = {
     // Handle `node:` scheme
     config.module.rules.push({
       test: /^node:/,
-      use: 'raw-loader', // Use raw-loader to handle `node:` imports
+      use: 'raw-loader', // This might not work as expected for core modules
+      // Alternatively, you can ignore 'node:' imports
+      type: 'javascript/auto',
     });
 
     return config;

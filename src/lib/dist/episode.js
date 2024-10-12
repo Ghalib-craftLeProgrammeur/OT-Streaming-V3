@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.getEpisodeDetails = void 0;
-var firebase_1 = require("../pages/api/firebase"); // Ensure this path points to your Firebase Admin setup
+var firebase_1 = require("@/pages/api/firebase"); // Ensure this path points to your Firebase Admin setup
 function getEpisodeDetails(episodeInfo) {
     return __awaiter(this, void 0, Promise, function () {
         var docRef, doc, episodeData, error_1;
