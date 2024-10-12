@@ -24,13 +24,13 @@ To run the project locally, follow these steps:
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/yourusername/anime-streaming-platform.git
+    git clone https://github.com/Ghalib-craftLeProgrammeur/OT-Streaming-V3.git
     ```
 
 2. Navigate to the project directory:
 
     ```bash
-    cd anime-streaming-platform
+    cd ot-streaming
     ```
 
 3. Install dependencies:
