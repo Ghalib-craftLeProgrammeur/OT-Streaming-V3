@@ -1,12 +1,14 @@
 // src/components/libs/firebase.ts
 import admin from "firebase-admin";
+const private_key = process.env.FIREBASE_PRIVATE_KEY;
 
+const modifiedId = private_key?.replace(/\\n/g, '\n');
 // Construct the service account from environment variables
 const serviceAccount:any = {
   type: process.env.FIREBASE_TYPE,
   project_id: process.env.FIREBASE_PROJECT_ID,
   private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
-  private_key: process.env.FIREBASE_PRIVATE_KEY!.replace(/\\n/g, '\n'), // Ensure newlines are handled
+  private_key: modifiedId, // Ensure newlines are handled
   client_email: process.env.FIREBASE_CLIENT_EMAIL,
   client_id: process.env.FIREBASE_CLIENT_ID,
   auth_uri: process.env.FIREBASE_AUTH_URI,
