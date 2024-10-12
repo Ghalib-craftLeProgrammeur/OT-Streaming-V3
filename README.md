@@ -1,4 +1,4 @@
-# Anime Streaming Platform
+# OT-Streaming
 
 This is an Anime streaming platform built with [Next.js](https://nextjs.org) and styled using modern UI components. The platform fetches and displays anime details using the AniList GraphQL API and allows users to view information about various animes, including descriptions, genres, and episodes.
 
