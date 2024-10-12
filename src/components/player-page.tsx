@@ -24,6 +24,9 @@ interface EpisodeDetails {
   description: string;
   season: number; // Add season if available
   thumbnail: string;
+  animeDetails: {
+    thumbnail: string;
+  }
 }
 
 export function PlayerPageComponent() {
@@ -48,7 +51,7 @@ export function PlayerPageComponent() {
           episode: Number(episode),
           animeName: decodedName,
         });
-        setEpisodeDetails(details as EpisodeDetails);
+        setEpisodeDetails(details as unknown as EpisodeDetails);
         setLoading(false); // Set loading to false after fetching
       }
     };
@@ -60,7 +63,7 @@ export function PlayerPageComponent() {
   useEffect(() => {
     if (iframeRef.current && episodeDetails) {
       // Assuming the embedCode contains an iframe element
-      const newEmbedCode = episodeDetails.embedCode.replace(/width="600px"/, 'width="800"'); // Change 800 to your desired width
+      const newEmbedCode = episodeDetails.embedCode.replace(/width="600px"/, 'width="800"').replace(/width="640"/, 'width="800"'); // Change 800 to your desired width
       iframeRef.current.innerHTML = newEmbedCode;
   }
   }, [episodeDetails]);
@@ -158,7 +161,7 @@ export function PlayerPageComponent() {
       <div className="flex space-x-4 bg-gray-800 rounded-lg p-2 hover:bg-gray-700 transition">
         <div className="flex-shrink-0 w-24 h-16 bg-gray-700 rounded-lg overflow-hidden">
           <img
-            src={`/placeholder.svg?height=90&width=160&text=Episode+${episodeDetails.nextEpisodeNumber}`}
+            src={episodeDetails.animeDetails.thumbnail}
             alt={`Episode ${episodeDetails.nextEpisodeNumber} Thumbnail`}
             className="w-full h-full object-cover"
           />
@@ -186,7 +189,7 @@ export function PlayerPageComponent() {
             <div className="flex space-x-4 bg-gray-800 rounded-lg p-2 hover:bg-gray-700 transition">
               <div className="flex-shrink-0 w-24 h-16 bg-gray-700 rounded-lg overflow-hidden">
                 <img
-                  src={episodeDetails.thumbnail}
+                  src={episodeDetails.animeDetails.thumbnail}
                   alt={`Episode ${episodeNumber} Thumbnail`}
                   className="w-full h-full object-cover"
                 />

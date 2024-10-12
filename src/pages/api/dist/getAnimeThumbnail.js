@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -47,40 +36,43 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var firebase_1 = require("@/pages/api/firebase"); // Import the Firestore instance
+var firebase_1 = require("@/pages/api/firebase");
 function handler(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, episode, animeName, episodeRef, episodeDoc, animeDoc, animeData, episodeData, combinedData, error_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var animeName, docRef, episodeData, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _a = req.body, episode = _a.episode, animeName = _a.animeName;
-                    _b.label = 1;
+                    // Allow only GET requests
+                    if (req.method !== 'GET') {
+                        return [2 /*return*/, res.status(405).json({ error: "Method not allowed" })]; // 405 Method Not Allowed
+                    }
+                    animeName = req.query.animeName;
+                    // Log the received animeName for debugging
+                    console.log("Received animeName:", animeName);
+                    // Check if animeName is valid
+                    if (!animeName || Array.isArray(animeName)) {
+                        return [2 /*return*/, res.status(400).json({ error: "Invalid anime name" })]; // 400 Bad Request
+                    }
+                    _a.label = 1;
                 case 1:
-                    _b.trys.push([1, 4, , 5]);
-                    episodeRef = firebase_1.db.collection("anime").doc(animeName).collection("episodes").doc(episode.toString());
-                    return [4 /*yield*/, episodeRef.get()];
-                case 2:
-                    episodeDoc = _b.sent();
+                    _a.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, firebase_1.db.collection("anime").doc(animeName).get()];
-                case 3:
-                    animeDoc = _b.sent();
-                    animeData = animeDoc.data();
-                    if (episodeDoc.exists && animeData) {
-                        episodeData = episodeDoc.data();
-                        combinedData = __assign(__assign({}, episodeData), { animeDetails: animeData // Include anime details
-                         });
-                        return [2 /*return*/, res.status(200).json(combinedData)]; // Return the combined episode and anime data as JSON
+                case 2:
+                    docRef = _a.sent();
+                    if (docRef.exists) {
+                        episodeData = docRef.data();
+                        return [2 /*return*/, res.status(200).json(episodeData)]; // Return the episode data as JSON
                     }
                     else {
-                        return [2 /*return*/, res.status(404).json({ error: "Episode or anime not found" })];
+                        return [2 /*return*/, res.status(404).json({ error: "Anime not found" })];
                     }
-                    return [3 /*break*/, 5];
-                case 4:
-                    error_1 = _b.sent();
-                    console.error("Error fetching episode details:", error_1);
-                    return [2 /*return*/, res.status(500).json({ error: "Failed to fetch episode details" })];
-                case 5: return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_1 = _a.sent();
+                    console.error("Error fetching anime details:", error_1);
+                    return [2 /*return*/, res.status(500).json({ error: "Failed to fetch anime details" })];
+                case 4: return [2 /*return*/];
             }
         });
     });

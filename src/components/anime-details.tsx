@@ -1,4 +1,9 @@
 'use client';
+interface Thumbnail {
+  thumbnail: string;
+  animeTitle: string;
+  totalEpisodes: number;
+}
 
 import Link from 'next/link';
 import { Button } from "@/components/ui/button";
@@ -8,32 +13,91 @@ import { useEffect, useState } from 'react';
 
 export function AnimeDetails() {
   const params = useParams(); // Use useParams to access dynamic route params
+  const [Thumbnial, setThumbnail] = useState<Thumbnail>();
+
   let animename = "name"; // Access the dynamic route parameter (e.g., [name])
   
-  if(params != null) {
+  if (params != null) {
     animename = params.name as string;
   } 
 
   const [animeTitle, setAnimeTitle] = useState<string | null>(null);
+  const [animeDescription, setAnimeDescription] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchDescription() {
+      const response = await fetch("https://graphql.anilist.co", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+            query ($search: String) {
+              Media(search: $search, type: ANIME) {
+                description
+              }
+            }
+          `,
+          variables: {
+            search: decodeURIComponent(animename),
+          },
+        }),
+      });
+  
+      const data = await response.json();
+      console.log(data.data);
+      setAnimeDescription(data.data.Media.description || "Pas de description disponible");
+    }
+    fetchDescription();
+  }, [animename]);
+
+  useEffect(() => {
+    async function fetchAnime() {
+      try {
+        const response = await fetch('/api/getAnimeDetails?animeName=' + (animename));
+        const data = await response.json();
+        setThumbnail(data);
+        console.log(JSON.parse(data));
+      } catch (error) {
+        console.error('Failed to fetch popular anime:', error);
+      }
+    }
+
+    fetchAnime();
+  }, [animename]);
 
   useEffect(() => {
     if (animename) {
-      setAnimeTitle(animename as string); // Set the anime title from the dynamic route
+      setAnimeTitle(decodeURIComponent(animename) as string); // Set the anime title from the dynamic route
     }
   }, [animename]);
+
+  console.log(Thumbnial);
 
   // Placeholder data for anime details
   const animeDetails = {
     title: animeTitle || "Loading...", // Fallback while loading
-    thumbnail: "/placeholder.svg?height=400&width=600&text=Attack+on+Titan",
-    rating: 4.8,
-    description: "Centuries ago, mankind was slaughtered to near extinction by monstrous humanoid creatures called Titans...",
+    thumbnail: Thumbnial?.thumbnail, // Use first thumbnail in the array
+   rating: 4.8,
+    description: animeDescription,
     genres: ["Action", "Dark Fantasy", "Post-apocalyptic"],
     episodes: [
-      { number: 1, title: "To You, 2,000 Years in the Future", duration: "24:12" },
-      // ... more episodes
+      { number: 1, title: animeTitle, duration: "24:12" },
+      // Add more episodes dynamically if conditions are met
     ]
   };
+
+  // Add more episodes if totalEpisodes > 5
+  if (Thumbnial?.totalEpisodes ? 0: 2 > 5) {
+    animeDetails.episodes.push(
+      { number: 2, title: animeTitle, duration: "24:12" },
+      { number: 3, title: animeTitle, duration: "24:12" },
+      { number: 4, title: animeTitle, duration: "24:12" },
+      { number: 5, title: animeTitle, duration: "24:12" }
+    );
+  }
 
   // Loading state
   if (!animeTitle) {
@@ -44,7 +108,7 @@ export function AnimeDetails() {
     <div className="min-h-screen bg-gray-900 text-white">
       <header className="bg-gray-800 py-4 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl font-bold">FreeAnimeStream</h1>
+          <h1 className="text-2xl font-bold">OT-Steaming</h1>
         </div>
       </header>
 
@@ -83,7 +147,7 @@ export function AnimeDetails() {
               <h3 className="text-xl font-semibold mb-4">Episodes</h3>
               <div className="space-y-4">
                 {animeDetails.episodes.map((episode) => (
-                  <Link href={`/watch/${episode.number}`} key={episode.number}>
+                  <Link href={`/animes/${animename}/${episode.number}`} key={episode.number}>
                     <div className="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition duration-300">
                       <div className="flex justify-between items-center">
                         <div>
@@ -103,7 +167,7 @@ export function AnimeDetails() {
 
       <footer className="bg-gray-800 py-6 px-4 sm:px-6 lg:px-8 mt-12">
         <div className="max-w-7xl mx-auto text-center">
-          <p>&copy; 2023 FreeAnimeStream. All rights reserved.</p>
+          <p>&copy; 2023 OT-Steaming. All rights reserved.</p>
           <p className="mt-2 text-sm text-gray-400">Supported by ads and community contributions.</p>
         </div>
       </footer>

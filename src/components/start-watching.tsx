@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search, Play } from "lucide-react"
-
+import  Link  from 'next/link'
 interface Anime {
   name: string
   genre: string
@@ -62,10 +62,12 @@ export function StartWatchingComponent() {
                   className="object-cover w-full h-full"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                  <Button size="sm" className="bg-green-500 hover:bg-green-600">
-                    <Play size={16} className="mr-2" />
-                    Watch
-                  </Button>
+                <Link href={`/animes/${anime.name}`} passHref>
+  <Button size="sm" className="bg-green-500 hover:bg-green-600 flex items-center">
+    <Play size={16} className="mr-2" />
+    Watch
+  </Button>
+</Link>
                 </div>
               </div>
               <div className="p-4">

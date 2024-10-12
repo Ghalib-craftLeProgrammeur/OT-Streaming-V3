@@ -89,7 +89,7 @@ function PlayerPageComponent() {
     react_1.useEffect(function () {
         if (iframeRef.current && episodeDetails) {
             // Assuming the embedCode contains an iframe element
-            var newEmbedCode = episodeDetails.embedCode.replace(/width="600px"/, 'width="800"'); // Change 800 to your desired width
+            var newEmbedCode = episodeDetails.embedCode.replace(/width="600px"/, 'width="800"').replace(/width="640"/, 'width="800"'); // Change 800 to your desired width
             iframeRef.current.innerHTML = newEmbedCode;
         }
     }, [episodeDetails]);
@@ -147,7 +147,7 @@ function PlayerPageComponent() {
                         episodeDetails.nextEpisodeNumber ? (React.createElement(link_1["default"], { href: "/anime/" + encodeURIComponent(name) + "/episode/" + episodeDetails.nextEpisodeNumber },
                             React.createElement("div", { className: "flex space-x-4 bg-gray-800 rounded-lg p-2 hover:bg-gray-700 transition" },
                                 React.createElement("div", { className: "flex-shrink-0 w-24 h-16 bg-gray-700 rounded-lg overflow-hidden" },
-                                    React.createElement("img", { src: "/placeholder.svg?height=90&width=160&text=Episode+" + episodeDetails.nextEpisodeNumber, alt: "Episode " + episodeDetails.nextEpisodeNumber + " Thumbnail", className: "w-full h-full object-cover" })),
+                                    React.createElement("img", { src: episodeDetails.animeDetails.thumbnail, alt: "Episode " + episodeDetails.nextEpisodeNumber + " Thumbnail", className: "w-full h-full object-cover" })),
                                 React.createElement("div", null,
                                     React.createElement("h4", { className: "font-semibold" },
                                         "Episode ",
@@ -161,7 +161,7 @@ function PlayerPageComponent() {
                                 return (React.createElement(link_1["default"], { key: index, href: "/animes/" + (name) + "/" + episodeNumber },
                                     React.createElement("div", { className: "flex space-x-4 bg-gray-800 rounded-lg p-2 hover:bg-gray-700 transition" },
                                         React.createElement("div", { className: "flex-shrink-0 w-24 h-16 bg-gray-700 rounded-lg overflow-hidden" },
-                                            React.createElement("img", { src: episodeDetails.thumbnail, alt: "Episode " + episodeNumber + " Thumbnail", className: "w-full h-full object-cover" })),
+                                            React.createElement("img", { src: episodeDetails.animeDetails.thumbnail, alt: "Episode " + episodeNumber + " Thumbnail", className: "w-full h-full object-cover" })),
                                         React.createElement("div", null,
                                             React.createElement("h4", { className: "font-semibold" },
                                                 "Episode ",

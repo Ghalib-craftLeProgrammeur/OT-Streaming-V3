@@ -16,20 +16,35 @@ interface Episode {
   name: string;
   description: string;
   season: number;
+  thumbnail: string; // Define the structure of the episode data
+}
+
+interface AnimeData {
+  title: string;
+  genre: string[];
+  // Add other fields you expect in your anime document
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { episode, animeName }: EpisodeInfo = req.body; // Expecting the episode info in the request body
 
   try {
-    const docRef = db.collection("anime").doc(animeName).collection("episodes").doc(episode.toString());
-    const doc = await docRef.get();
+    const episodeRef = db.collection("anime").doc(animeName).collection("episodes").doc(episode.toString());
+    const episodeDoc = await episodeRef.get();
     
-    if (doc.exists) {
-      const episodeData = doc.data() as Episode;
-      return res.status(200).json(episodeData); // Return the episode data as JSON
+    // Retrieve the anime document
+    const animeDoc = await db.collection("anime").doc(animeName).get();
+    const animeData = animeDoc.data() as AnimeData | undefined; // Ensure it's properly typed
+    
+    if (episodeDoc.exists && animeData) {
+      const episodeData = episodeDoc.data() as Episode; // Get episode data
+      const combinedData = {
+        ...episodeData,
+        animeDetails: animeData // Include anime details
+      };
+      return res.status(200).json(combinedData); // Return the combined episode and anime data as JSON
     } else {
-      return res.status(404).json({ error: "Episode not found" });
+      return res.status(404).json({ error: "Episode or anime not found" });
     }
   } catch (error) {
     console.error("Error fetching episode details:", error);
